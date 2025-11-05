@@ -19,7 +19,7 @@ public class TodoRestController {
     private final TodoService todoService;
 
     // 일정 생성(작성)
-    @PostMapping("/create")
+    @PostMapping
     public CreateTodoResponse createTodo(@RequestBody CreateTodoRequest request) {
         return todoService.save(request);
     }
@@ -41,11 +41,13 @@ public class TodoRestController {
     }
 
     // 일정 수정
-    @PutMapping("/update/{id}")
+    @PatchMapping("/{id}")
     public UpdateTodoResponse updateTodo(
         @PathVariable long id,
         @RequestBody UpdateTodoRequest request
     ) {
-        return todoService.update(id, request);
+        return todoService.patch(id, request);
     }
+
+    @DeleteMapping("/{id}")
 }

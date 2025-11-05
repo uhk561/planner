@@ -100,7 +100,7 @@ public class TodoService {
 
     // 일정 수정
     @Transactional
-    public UpdateTodoResponse update(Long id, UpdateTodoRequest request) {
+    public UpdateTodoResponse patch(Long id, UpdateTodoRequest request) {
         TodoEntity todo = todoRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("해당 일정이 존재하지 하지않습니다.")
         );
