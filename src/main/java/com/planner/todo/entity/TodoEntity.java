@@ -30,11 +30,9 @@ public class TodoEntity extends BaseEntity {
         this.password =password;
     }
 
-    public void update(String title, String content, String userName, String password) {
+    public void update(String title,String userName) {
         this.title =title;
-        this.content =content;
         this.userName =userName;
-        this.password =password;
     }
 
 

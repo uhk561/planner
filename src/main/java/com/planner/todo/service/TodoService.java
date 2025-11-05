@@ -3,6 +3,8 @@ package com.planner.todo.service;
 import com.planner.todo.dto.create.CreateTodoRequest;
 import com.planner.todo.dto.create.CreateTodoResponse;
 import com.planner.todo.dto.get.GetTodoResponse;
+import com.planner.todo.dto.update.UpdateTodoRequest;
+import com.planner.todo.dto.update.UpdateTodoResponse;
 import com.planner.todo.entity.TodoEntity;
 import com.planner.todo.repository.TodoRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,4 +97,28 @@ public class TodoService {
         }
         return dtos;
     }
+
+    // 일정 수정
+    @Transactional
+    public UpdateTodoResponse update(Long id, UpdateTodoRequest request) {
+        TodoEntity todo = todoRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("해당 일정이 존재하지 하지않습니다.")
+        );
+
+        if (!todo.getPassword().equals(request.getPassword())) { // 비밀번호 검증
+            throw new IllegalStateException("비밀번호가 올바르지 않습니다.");
+        }
+
+        todo.update(
+                request.getTitle(),
+                request.getUserName()
+        );
+        return new UpdateTodoResponse(
+                todo.getTitle(),
+                todo.getUserName(),
+                todo.getModifiedAt()
+        );
+
+    }
+
 }

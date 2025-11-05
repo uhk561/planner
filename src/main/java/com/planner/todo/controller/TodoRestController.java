@@ -3,6 +3,8 @@ package com.planner.todo.controller;
 import com.planner.todo.dto.create.CreateTodoRequest;
 import com.planner.todo.dto.create.CreateTodoResponse;
 import com.planner.todo.dto.get.GetTodoResponse;
+import com.planner.todo.dto.update.UpdateTodoRequest;
+import com.planner.todo.dto.update.UpdateTodoResponse;
 import com.planner.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +38,14 @@ public class TodoRestController {
             return todoService.getTodoByUser(userName);
         }
         return todoService.getAll();
+    }
+
+    // 일정 수정
+    @PutMapping("/update/{id}")
+    public UpdateTodoResponse updateTodo(
+        @PathVariable long id,
+        @RequestBody UpdateTodoRequest request
+    ) {
+        return todoService.update(id, request);
     }
 }
