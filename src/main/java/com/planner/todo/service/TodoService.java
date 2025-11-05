@@ -7,9 +7,11 @@ import com.planner.todo.dto.update.UpdateTodoRequest;
 import com.planner.todo.dto.update.UpdateTodoResponse;
 import com.planner.todo.entity.TodoEntity;
 import com.planner.todo.repository.TodoRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,7 @@ public class TodoService {
     @Transactional(readOnly = true)
     public GetTodoResponse getTodo(long id) {
         TodoEntity todo = todoRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("해당 일정이 존재하지 하지않습니다.")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다.")
         );
         return new GetTodoResponse(
                 todo.getId(),
@@ -102,11 +104,11 @@ public class TodoService {
     @Transactional
     public UpdateTodoResponse patch(Long id, UpdateTodoRequest request) {
         TodoEntity todo = todoRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("해당 일정이 존재하지 하지않습니다.")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다.")
         );
 
         if (!todo.getPassword().equals(request.getPassword())) { // 비밀번호 검증
-            throw new IllegalStateException("비밀번호가 올바르지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다.");
         }
 
         todo.update(
@@ -127,7 +129,7 @@ public class TodoService {
 
         // 삭제하려는 일정이 없는 경우
         if (!existence) {
-            throw new IllegalStateException("해당 일정이 존재하지 하지않습니다.");
+            new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다.");
         }
 
         // 삭제하려는 일정이 있는 경우
