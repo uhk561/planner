@@ -50,4 +50,7 @@ public class TodoRestController {
     }
 
     @DeleteMapping("/{id}")
+    public void deleteTodo(@PathVariable long id) {
+        todoService.deleteTodo(id);
+    }
 }

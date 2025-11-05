@@ -121,4 +121,17 @@ public class TodoService {
 
     }
 
+    @Transactional
+    public void deleteTodo(Long id) {
+        boolean existence = todoRepository.existsById(id);
+
+        // 삭제하려는 일정이 없는 경우
+        if (!existence) {
+            throw new IllegalStateException("해당 일정이 존재하지 하지않습니다.");
+        }
+
+        // 삭제하려는 일정이 있는 경우
+        todoRepository.deleteById(id);
+    }
+
 }
