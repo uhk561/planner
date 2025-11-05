@@ -1,12 +1,17 @@
 package com.planner.todo.service;
 
-import com.planner.todo.dto.CreateTodoRequest;
-import com.planner.todo.dto.CreateTodoResponse;
+import com.planner.todo.dto.create.CreateTodoRequest;
+import com.planner.todo.dto.create.CreateTodoResponse;
+import com.planner.todo.dto.get.GetTodoResponse;
 import com.planner.todo.entity.TodoEntity;
 import com.planner.todo.repository.TodoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +38,61 @@ public class TodoService {
                 saveTodo.getCreatedAt(),
                 saveTodo.getModifiedAt()
         );
+
+    }
+    // 선택 일정 조회(단 건 조회)
+    @Transactional(readOnly = true)
+    public GetTodoResponse getTodo(long id) {
+        TodoEntity todo = todoRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("해당 일정이 존재하지 하지않습니다.")
+        );
+        return new GetTodoResponse(
+                todo.getId(),
+                todo.getTitle(),
+                todo.getContent(),
+                todo.getUserName(),
+                todo.getCreatedAt(),
+                todo.getModifiedAt()
+        );
+    }
+
+    // 전체 일정 조회(다 건 조회)
+    @Transactional(readOnly = true)
+    public List<GetTodoResponse> getAll() {
+        List<TodoEntity> todos = todoRepository.findAll();
+
+        List<GetTodoResponse> dtos = new ArrayList<>();
+        for (TodoEntity todo : todos) {
+            GetTodoResponse dto = new GetTodoResponse(
+                    todo.getId(),
+                    todo.getTitle(),
+                    todo.getContent(),
+                    todo.getUserName(),
+                    todo.getCreatedAt(),
+                    todo.getModifiedAt()
+            );
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    // 작성자명을 기준으로 전체 일정 조회
+    @Transactional(readOnly = true)
+    public List<GetTodoResponse> getTodoByUser(String userName) {
+        List<TodoEntity> todos = todoRepository.findByUserName(userName);
+
+        List<GetTodoResponse> dtos = new ArrayList<>();
+        for (TodoEntity todo : todos) {
+            GetTodoResponse dto = new GetTodoResponse(
+                    todo.getId(),
+                    todo.getTitle(),
+                    todo.getContent(),
+                    todo.getUserName(),
+                    todo.getCreatedAt(),
+                    todo.getModifiedAt()
+            );
+            dtos.add(dto);
+        }
+        return dtos;
     }
 }

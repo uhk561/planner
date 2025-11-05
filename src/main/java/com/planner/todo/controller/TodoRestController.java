@@ -1,13 +1,13 @@
 package com.planner.todo.controller;
 
-import com.planner.todo.dto.CreateTodoRequest;
-import com.planner.todo.dto.CreateTodoResponse;
+import com.planner.todo.dto.create.CreateTodoRequest;
+import com.planner.todo.dto.create.CreateTodoResponse;
+import com.planner.todo.dto.get.GetTodoResponse;
 import com.planner.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +20,21 @@ public class TodoRestController {
     @PostMapping("/create")
     public CreateTodoResponse createTodo(@RequestBody CreateTodoRequest request) {
         return todoService.save(request);
+    }
+
+    // 선택 일정 조회 (단 건 조회)
+    @GetMapping("/{id}")
+    public GetTodoResponse getTodo(@PathVariable long id) {
+       return todoService.getTodo(id);
+    }
+
+    // 전체 일정 조회(다 건 조회)
+    @GetMapping
+    public List<GetTodoResponse> getAllTodo(
+            @RequestParam(required = false)String userName) {
+        if (userName != null &&  !userName.isEmpty()) {
+            return todoService.getTodoByUser(userName);
+        }
+        return todoService.getAll();
     }
 }

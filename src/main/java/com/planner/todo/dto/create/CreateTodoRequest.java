@@ -1,4 +1,4 @@
-package com.planner.todo.dto;
+package com.planner.todo.dto.create;
 
 import lombok.Getter;
 
