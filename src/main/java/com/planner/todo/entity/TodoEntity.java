@@ -31,8 +31,13 @@ public class TodoEntity extends BaseEntity {
     }
 
     public void update(String title,String userName) {
-        this.title =title;
-        this.userName =userName;
+        if(title != null) { // 만약 제목과 작성자명 중 하나만 변경하려고 둘 중 하나의 값만 보냈을 때 null이면 원래 데이터값
+            this.title =title;
+        }
+
+        if(userName != null) {
+            this.userName =userName;
+        }
     }
 
 
