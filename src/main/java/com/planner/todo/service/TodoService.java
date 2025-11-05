@@ -81,7 +81,7 @@ public class TodoService {
     // 작성자명을 기준으로 전체 일정 조회
     @Transactional(readOnly = true)
     public List<GetTodoResponse> getTodoByUser(String userName) {
-        List<TodoEntity> todos = todoRepository.findByUserName(userName);
+        List<TodoEntity> todos = todoRepository.findByUserNameOrderByModifiedAtDesc(userName);
 
         List<GetTodoResponse> dtos = new ArrayList<>();
         for (TodoEntity todo : todos) {

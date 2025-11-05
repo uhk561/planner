@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
 
-    List<TodoEntity> findByUserName(String userName);
+    List<TodoEntity> findByUserNameOrderByModifiedAtDesc(String userName);
 }
