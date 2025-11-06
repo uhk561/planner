@@ -21,6 +21,12 @@ public class CommentService {
     public CreateCommentResponse save(Long todoId, CreateCommentRequest request) {
         TodoEntity todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다."));
+
+        long countComment = commentRepository.countByTodo_Id(todoId); // 같은 todoId의 갯수 확인
+        if (countComment >= 10) {
+            throw new IllegalArgumentException("댓글은 최대 10개까지만 작성할 수 있습니다.");
+        }
+
         CommentEntity comment = new CommentEntity(
                 todo,
                 request.getContent(),

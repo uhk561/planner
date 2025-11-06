@@ -2,6 +2,7 @@ package com.planner.todo.controller;
 
 import com.planner.todo.dto.create.CreateTodoRequest;
 import com.planner.todo.dto.create.CreateTodoResponse;
+import com.planner.todo.dto.delete.DeleteTodoRequest;
 import com.planner.todo.dto.get.GetTodoResponse;
 import com.planner.todo.dto.update.UpdateTodoRequest;
 import com.planner.todo.dto.update.UpdateTodoResponse;
@@ -52,8 +53,10 @@ public class TodoRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable long id) {
-        todoService.deleteTodo(id);
+    public ResponseEntity<Void> deleteTodo(
+            @PathVariable long id,
+            @RequestBody DeleteTodoRequest request) {
+        todoService.deleteTodo(id, request.getPassword());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -50,6 +50,7 @@ public class TodoService {
         TodoEntity todo = todoRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다.")
         );
+
         return new GetTodoResponse(
                 todo.getId(),
                 todo.getTitle(),
@@ -124,12 +125,13 @@ public class TodoService {
     }
 
     @Transactional
-    public void deleteTodo(Long id) {
-        boolean existence = todoRepository.existsById(id);
+    public void deleteTodo(Long id, String password) {
+        TodoEntity todo = todoRepository.findById(id).orElseThrow(
+                () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다.")
+        );
 
-        // 삭제하려는 일정이 없는 경우
-        if (!existence) {
-            new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다.");
+        if (!todo.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 
         // 삭제하려는 일정이 있는 경우
