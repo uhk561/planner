@@ -1,4 +1,4 @@
-# 🗓️ Java Console Kiosk
+# 🗓️ Planner
 
 ##  프로젝트 소개
 Spring Boot + JPA 기반 일정 관리 API
